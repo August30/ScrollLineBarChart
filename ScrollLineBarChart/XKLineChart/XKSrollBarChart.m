@@ -251,7 +251,9 @@ static CGFloat const BarTopMargin = 30;
     shapeLayer.strokeColor = [UIColor clearColor].CGColor;
     [self.scrollViewContentView.layer addSublayer:shapeLayer];
     shapeLayer.path = bezierPath.CGPath;
+    UIGraphicsBeginImageContext(self.scrollViewContentView.bounds.size);
     [bezierPath stroke];
+    UIGraphicsEndImageContext();
     self.bgSHaperLayer = shapeLayer;
 }
 

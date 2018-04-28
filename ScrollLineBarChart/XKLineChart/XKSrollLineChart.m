@@ -224,7 +224,9 @@ static CGFloat const TopMargin = 30;
     shapeLayer.strokeColor = self.apperColor.CGColor;
     [self.scrollViewContentView.layer addSublayer:shapeLayer];
     shapeLayer.path = bezierPath.CGPath;
+    UIGraphicsBeginImageContext(self.scrollViewContentView.bounds.size);
     [bezierPath stroke];
+    UIGraphicsEndImageContext();
     self.lineShaperLayer = shapeLayer;
 }
 
