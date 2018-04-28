@@ -28,6 +28,7 @@
     lineChart.apperColor = [UIColor colorWithRed:43.f / 255.f green:73.f / 255.f blue:135.f / 255.f alpha:1];
     lineChart.textColor = [UIColor colorWithRed:122.f / 255.f green:143.f / 255.f blue:153.f / 255.f alpha:1];
     lineChart.canScroll = YES;
+    lineChart.showBackground = NO;
     lineChart.xLabelNames = @[@"9:00", @"9:30", @"10:00", @"10:30", @"11:00", @"11:30", @"12:00", @"12:30"];
     lineChart.datas = @[@(1.0), @(1.5), @(2.0), @(0.1), @(0.5), @(3.0), @(1.5), @(1.0)];
     [lineChart strokeChart];

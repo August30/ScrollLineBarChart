@@ -9,11 +9,11 @@
 @interface XKSrollLineChart : UIView
 
 @property (nonatomic, assign) BOOL canScroll;
+@property (nonatomic, assign) BOOL showBackground;
 @property (nonatomic, strong) NSArray <NSNumber *>*datas;
 @property (nonatomic, strong) NSArray <NSString *>*xLabelNames;
 @property (nonatomic, strong) UIColor *apperColor;
 @property (nonatomic, strong) UIColor *textColor;
-@property (nonatomic, assign) NSInteger selectIndex;
 
 - (void)strokeChart;
 

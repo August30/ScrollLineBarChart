@@ -15,7 +15,6 @@
 @property (nonatomic, strong) NSArray <NSString *>*xLabelNames;
 @property (nonatomic, strong) UIColor *apperColor;
 @property (nonatomic, strong) UIColor *textColor;
-@property (nonatomic, assign) NSInteger selectIndex;
 
 - (void)strokeChart;
 

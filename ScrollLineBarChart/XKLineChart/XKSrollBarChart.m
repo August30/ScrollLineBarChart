@@ -34,8 +34,6 @@ static CGFloat const BarTopMargin = 30;
 @property (nonatomic, strong) CAShapeLayer *barShaperLayer;
 @property (nonatomic, strong) CAShapeLayer *bgSHaperLayer;
 
-@property (nonatomic, strong) UIView *pointView;
-
 @end
 
 @implementation XKSrollBarChart
@@ -44,7 +42,6 @@ static CGFloat const BarTopMargin = 30;
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.selectIndex = -1;
     }
     return self;
 }
@@ -66,10 +63,7 @@ static CGFloat const BarTopMargin = 30;
     [self scrollViewInitSize];
     [self XYLabelInit];
     [self XYInit];
-//    [self drawLine];
     [self drawBar];
-    [self drawDotLine];
-    [self addSelectPoint];
     [self valueLabelInit];
 }
 
@@ -128,16 +122,6 @@ static CGFloat const BarTopMargin = 30;
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapXLabel:)];
         [xLabel addGestureRecognizer:tap];
         [marr addObject:xLabel];
-        // 分割线
-//        UIImageView *lineImageView = [[UIImageView alloc] init];
-//        lineImageView.backgroundColor = UIColorFromRGB(0xE1E1E1);
-//        [self.scrollViewContentView addSubview:lineImageView];
-//        [lineImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.centerX.mas_equalTo(xLabel);
-//            make.bottom.mas_equalTo(-BarBottomMargin + 4);
-//            make.width.mas_equalTo(1);
-//            make.height.mas_equalTo(4);
-//        }];
     }];
     self.xLabelArray = marr;
     
@@ -169,16 +153,6 @@ static CGFloat const BarTopMargin = 30;
         yLabel.y = self.height - (BarBottomMargin + idx * yLabelGap) - 10;
         yLabel.width = 40;
         yLabel.height = 20;
-        // 分割线
-//        UIImageView *lineImageView = [[UIImageView alloc] init];
-//        lineImageView.backgroundColor = UIColorFromRGB(0xE1E1E1);
-//        [self.scrollViewContentView addSubview:lineImageView];
-//        [lineImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.height.mas_equalTo(1);
-//            make.left.mas_equalTo(yLabel.mas_right).offset(10);
-//            make.right.mas_equalTo(0);
-//            make.centerY.mas_equalTo(yLabel);
-//        }];
     }];
 }
 
@@ -215,23 +189,6 @@ static CGFloat const BarTopMargin = 30;
     valueLabel.hidden = NO;
 }
 
-- (void)drawLine {
-    UIBezierPath *bezierPath = [UIBezierPath bezierPath];
-    [bezierPath moveToPoint:CGPointMake([self.xArray[0] floatValue], [self.yArray[0] floatValue])];
-    for (int i = 1; i < self.xArray.count ; ++i) {
-        [bezierPath addLineToPoint:CGPointMake([self.xArray[i] floatValue], [self.yArray[i] floatValue])];
-    }
-    CAShapeLayer *shapeLayer = [[CAShapeLayer alloc] init];
-    shapeLayer.frame = self.bounds;
-    shapeLayer.lineWidth = 3;
-    shapeLayer.fillColor = [UIColor clearColor].CGColor;
-    shapeLayer.strokeColor = self.apperColor.CGColor;
-    [self.scrollViewContentView.layer addSublayer:shapeLayer];
-    shapeLayer.path = bezierPath.CGPath;
-    [bezierPath stroke];
-    self.barShaperLayer = shapeLayer;
-}
-
 - (void)drawBar {
     CGFloat width =  self.scrollViewContentView.frame.size.width;
     CGFloat xLabelWidth = (width )/self.xLabelNames.count;
@@ -255,37 +212,6 @@ static CGFloat const BarTopMargin = 30;
     [bezierPath stroke];
     UIGraphicsEndImageContext();
     self.bgSHaperLayer = shapeLayer;
-}
-
-// 虚线
-- (void)drawDotLine {
-    if (self.selectIndex >= 0) {
-        CGFloat selectPointX = [self.xArray[self.selectIndex] floatValue];
-        UIBezierPath *dotline = [UIBezierPath bezierPath];
-        [dotline moveToPoint:CGPointMake(selectPointX , 0)];
-        [dotline addLineToPoint:CGPointMake(selectPointX , self.height - BarBottomMargin)];
-        dotline.lineWidth = 1;
-        [[UIColor clearColor] set];
-        [dotline stroke];
-        
-        CAShapeLayer *dotShapeLine = [[CAShapeLayer alloc]init];
-        dotShapeLine.strokeColor = [UIColor colorWithRed:151.f / 255.f green:151.f / 255.f blue:151.f / 255.f alpha:1].CGColor;
-        dotShapeLine.lineWidth = 1;
-        [dotShapeLine setLineDashPattern:[NSArray arrayWithObjects:[NSNumber numberWithInt:6], [NSNumber numberWithInt:4], nil]];
-        [self.layer addSublayer:dotShapeLine];
-        dotShapeLine.path = dotline.CGPath;
-    }
-}
-
-- (void)addSelectPoint {
-    if (self.selectIndex >= 0) {
-        CGFloat selectPointX = [self.xArray[self.selectIndex] floatValue];
-        CGFloat selectPointY = [self.yArray[self.selectIndex] floatValue];
-        self.pointView.center = CGPointMake(selectPointX - 6, selectPointY - 6);
-        self.pointView.backgroundColor = self.apperColor;
-        self.pointView.size = CGSizeMake(12,12);
-        [self addSubview:self.pointView];
-    }
 }
 
 #pragma mark - Get
@@ -312,15 +238,6 @@ static CGFloat const BarTopMargin = 30;
         _apperColor = [UIColor colorWithRed:43.f / 255.f green:73.f / 255.f blue:135.f / 255.f alpha:1];
     }
     return _apperColor;
-}
-
-- (UIView *)pointView {
-    if (!_pointView) {
-        _pointView = [[UIView alloc] init];
-        _pointView.layer.cornerRadius = 6;
-        _pointView.layer.masksToBounds = YES;
-    }
-    return _pointView;
 }
 
 @end
